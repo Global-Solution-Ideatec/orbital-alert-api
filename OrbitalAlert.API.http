@@ -1,0 +1,6 @@
+@OrbitalAlert.API_HostAddress = http://localhost:5043
+
+GET {{OrbitalAlert.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
