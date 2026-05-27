@@ -1,23 +1,23 @@
-# ?? Orbital Alert API
+# 🚀 Orbital Alert API
 
-API desenvolvida em ASP.NET Core 8 para monitoramento de alertas urbanos com integra��o � API p�blica da NASA (APOD).
+API desenvolvida em ASP.NET Core 8 para monitoramento de alertas urbanos com integração à API pública da NASA (APOD).
 
 Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP.
 
 ---
 
-# ?? Funcionalidades
+# 🌍 Funcionalidades
 
 - CRUD completo de cidades
-- Integra��o com API da NASA
-- Swagger para documenta��o
+- Integração com API da NASA
+- Swagger para documentação
 - PostgreSQL com Entity Framework Core
 - Docker e Docker Compose
 - Arquitetura REST
 
 ---
 
-# ?? Tecnologias Utilizadas
+# ☄️ Tecnologias Utilizadas
 
 - ASP.NET Core 8
 - Entity Framework Core
@@ -29,28 +29,28 @@ Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP
 
 ---
 
-# ?? Estrutura do Projeto
+# 📁 Estrutura do Projeto
 
 ```txt
 OrbitalAlert.API
-?
-??? Controllers
-??? Models
-??? Data
-??? Services
-??? DTOs
-??? Migrations
-??? Dockerfile
-??? docker-compose.yml
-??? appsettings.json
-??? Program.cs
+│
+├── Controllers
+├── Models
+├── Data
+├── Services
+├── DTOs
+├── Migrations
+├── Dockerfile
+├── docker-compose.yml
+├── appsettings.json
+└── Program.cs
 ```
 
 ---
 
-# ?? Como Executar o Projeto
+# 🐳 Como Executar o Projeto
 
-## 1?? Clonar o reposit�rio
+## 1️⃣ Clonar o repositório
 
 ```bash
 git clone URL_DO_SEU_REPOSITORIO
@@ -58,7 +58,7 @@ git clone URL_DO_SEU_REPOSITORIO
 
 ---
 
-## 2?? Entrar na pasta do projeto
+## 2️⃣ Entrar na pasta do projeto
 
 ```bash
 cd OrbitalAlert.API
@@ -66,7 +66,7 @@ cd OrbitalAlert.API
 
 ---
 
-## 3?? Subir os containers Docker
+## 3️⃣ Subir os containers Docker
 
 ```bash
 docker compose up --build
@@ -74,7 +74,7 @@ docker compose up --build
 
 ---
 
-# ?? Acessar Swagger
+# 🚀 Acessar Swagger
 
 Abra no navegador:
 
@@ -84,9 +84,9 @@ http://localhost:8080/swagger
 
 ---
 
-# ?? Endpoint NASA
+# 🌌 Endpoint NASA
 
-## Buscar imagem astron�mica do dia
+## Buscar imagem astronômica do dia
 
 ```http
 GET /api/Nasa/apod
@@ -97,7 +97,7 @@ GET /api/Nasa/apod
 ```json
 {
   "title": "Headphone Nebula",
-  "explanation": "Descri��o da imagem astron�mica...",
+  "explanation": "Descrição da imagem astronômica...",
   "url": "https://apod.nasa.gov/apod/image/example.jpg",
   "date": "2026-05-27"
 }
@@ -105,9 +105,9 @@ GET /api/Nasa/apod
 
 ---
 
-# ??? CRUD de Cities
+# 🏙️ CRUD de Cities
 
-## ? Criar cidade
+## ➕ Criar cidade
 
 ```http
 POST /api/Cities
@@ -117,7 +117,7 @@ POST /api/Cities
 
 ```json
 {
-  "name": "S�o Paulo",
+  "name": "São Paulo",
   "state": "SP",
   "riskLevel": "Alto"
 }
@@ -125,7 +125,7 @@ POST /api/Cities
 
 ---
 
-## ?? Listar cidades
+## 📖 Listar cidades
 
 ```http
 GET /api/Cities
@@ -133,7 +133,7 @@ GET /api/Cities
 
 ---
 
-## ?? Atualizar cidade
+## ✏️ Atualizar cidade
 
 ```http
 PUT /api/Cities/{id}
@@ -144,15 +144,15 @@ PUT /api/Cities/{id}
 ```json
 {
   "id": 1,
-  "name": "S�o Paulo",
+  "name": "São Paulo",
   "state": "SP",
-  "riskLevel": "Cr�tico"
+  "riskLevel": "Crítico"
 }
 ```
 
 ---
 
-## ? Remover cidade
+## ❌ Remover cidade
 
 ```http
 DELETE /api/Cities/{id}
@@ -160,7 +160,7 @@ DELETE /api/Cities/{id}
 
 ---
 
-# ??? Banco de Dados
+# 🛢️ Banco de Dados
 
 Banco utilizado:
 
@@ -168,7 +168,7 @@ Banco utilizado:
 PostgreSQL
 ```
 
-A conex�o � configurada no:
+A conexão é configurada no:
 
 ```txt
 appsettings.json
@@ -176,7 +176,7 @@ appsettings.json
 
 ---
 
-# ?? Docker
+# 🐳 Docker
 
 ## Subir containers
 
@@ -192,9 +192,9 @@ docker compose down
 
 ---
 
-# ????? Autores
+# 👨‍💻 Autores
 Carlos Eduardo Rodrigues Coelho Pacheco - RM: 557323
-Jo�o Pedro Amorim Brito Virgens - RM: 559213
+João Pedro Amorim Brito Virgens - RM: 559213
 Pedro Augusto Costa Ladeira - RM: 558514
 
-Projeto acad�mico desenvolvido para a FIAP utilizando ASP.NET Core, PostgreSQL, Docker e integra��o com API p�blica da NASA.
+Projeto acadêmico desenvolvido para a FIAP utilizando ASP.NET Core, PostgreSQL, Docker e integração com API pública da NASA.
