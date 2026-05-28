@@ -1,0 +1,22 @@
+```gitignore
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Build
+bin/
+obj/
+
+# Docker
+docker-data/
+
+# Logs
+*.log
+
+# Rider
+.idea/
+
+# VSCode
+.vscode/
+```

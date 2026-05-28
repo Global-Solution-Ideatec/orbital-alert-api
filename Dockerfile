@@ -1,30 +1,39 @@
-# Imagem base para execução
+# Imagem base
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+
+# cria usuário não root
+RUN useradd -m appuser
+
+# usuário da aplicação
+USER appuser
+
+# diretório de trabalho
 WORKDIR /app
+
+# porta
 EXPOSE 8080
 
-# Imagem para build
+# build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
 WORKDIR /src
 
-# Copia csproj
 COPY ["OrbitalAlert.API.csproj", "./"]
 
-# Restore
 RUN dotnet restore "OrbitalAlert.API.csproj"
 
-# Copia tudo
 COPY . .
 
-# Build
 RUN dotnet build "OrbitalAlert.API.csproj" -c Release -o /app/build
 
-# Publish
+# publish
 FROM build AS publish
+
 RUN dotnet publish "OrbitalAlert.API.csproj" -c Release -o /app/publish
 
-# Imagem final
+# final
 FROM base AS final
+
 WORKDIR /app
 
 COPY --from=publish /app/publish .

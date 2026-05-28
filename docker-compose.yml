@@ -2,29 +2,54 @@ version: '3.9'
 
 services:
 
+  orbital-api:
+
+    container_name: rm557323-api
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: Host=rm557323-postgres;Port=5432;Database=orbitaldb;Username=postgres;Password=postgres
+
+    depends_on:
+      - postgres
+
+    networks:
+      - orbital-network
+
+    restart: always
+
   postgres:
+
     image: postgres:16
-    container_name: orbital-postgres
+
+    container_name: rm557323-postgres
+
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: orbitaldb
+
     ports:
       - "5432:5432"
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  orbital-api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: orbital-api
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-    environment:
-      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=orbitaldb;Username=postgres;Password=postgres
+    networks:
+      - orbital-network
+
+    restart: always
 
 volumes:
   postgres_data:
+
+networks:
+  orbital-network:
