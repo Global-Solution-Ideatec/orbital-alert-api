@@ -53,7 +53,7 @@ OrbitalAlert.API
 ## 1️⃣ Clonar o repositório
 
 ```bash
-git clone URL_DO_SEU_REPOSITORIO
+git clone https://github.com/Global-Solution-Ideatec/orbital-alert-api.git
 ```
 
 ---
@@ -198,5 +198,7 @@ Carlos Eduardo Rodrigues Coelho Pacheco - RM: 557323
 João Pedro Amorim Brito Virgens - RM: 559213
 
 Pedro Augusto Costa Ladeira - RM: 558514
+
+---
 
 Projeto acadêmico desenvolvido para a FIAP utilizando ASP.NET Core, PostgreSQL, Docker e integração com API pública da NASA.
