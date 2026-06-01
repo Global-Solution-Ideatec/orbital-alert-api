@@ -6,6 +6,7 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
 <Project>
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword />
+    <History>True|2026-06-01T23:35:04.9249292Z||;</History>
+    <LastFailureDetails />
   </PropertyGroup>
 </Project>
