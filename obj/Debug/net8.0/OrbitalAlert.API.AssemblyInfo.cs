@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OrbitalAlert.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecf65d7326818dea4c926c65a8d331bbc98a3b3d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e8aa041c71a4f9fe014ea8ccecfae264e1f453eb")]
 [assembly: System.Reflection.AssemblyProductAttribute("OrbitalAlert.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OrbitalAlert.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -2,5 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ActiveDebugProfile>Container (Dockerfile)</ActiveDebugProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\cadup\Documents\Aulas fiap\Devops - 2026\GS-2026-.NET\OrbitalAlert.API\OrbitalAlert.API\Properties\PublishProfiles\orbitalalert-api-rm557323 - Zip Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
