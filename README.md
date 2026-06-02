@@ -8,11 +8,14 @@ Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP
 
 # 🌍 Funcionalidades
 
-- CRUD completo de cidades
-- Integração com API da NASA
+- CRUD completo de Cities
+- CRUD completo de Alerts
+- Integração com API da NASA (APOD)
 - Swagger para documentação
 - PostgreSQL com Entity Framework Core
 - Docker e Docker Compose
+- Azure App Service
+- Azure Database for PostgreSQL
 - Arquitetura REST
 
 ---
@@ -21,10 +24,12 @@ Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP
 
 - ASP.NET Core 8
 - Entity Framework Core
-- PostgreSQL
+- PostgreSQL 16
 - Docker
 - Docker Compose
-- Swagger
+- Swagger / OpenAPI
+- Azure App Service
+- Azure Database for PostgreSQL
 - NASA APOD API
 
 ---
@@ -35,10 +40,14 @@ Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP
 OrbitalAlert.API
 │
 ├── Controllers
+│   ├── CitiesController.cs
+│   ├── AlertsController.cs
+│   └── NasaController.cs
 ├── Models
 ├── Data
 ├── Services
 ├── DTOs
+├── Repositories
 ├── Migrations
 ├── Dockerfile
 ├── docker-compose.yml
@@ -69,17 +78,25 @@ cd OrbitalAlert.API
 ## 3️⃣ Subir os containers Docker
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 ---
 
-# 🚀 Acessar Swagger
+## 4️⃣ Verificar containers em execução
 
-Abra no navegador:
+```bash
+docker ps
+```
+
+---
+
+# 🚀 Swagger Publicado na Azure
+
+A API está disponível publicamente através do Azure App Service:
 
 ```txt
-http://localhost:8080/swagger
+https://orbitalalert-api-rm557323-czdna8eddqfzgrbc.brazilsouth-01.azurewebsites.net/swagger
 ```
 
 ---
@@ -133,6 +150,14 @@ GET /api/Cities
 
 ---
 
+## 🔍 Buscar cidade por ID
+
+```http
+GET /api/Cities/{id}
+```
+
+---
+
 ## ✏️ Atualizar cidade
 
 ```http
@@ -160,15 +185,107 @@ DELETE /api/Cities/{id}
 
 ---
 
+# 🚨 CRUD de Alerts
+
+## ➕ Criar alerta
+
+```http
+POST /api/Alerts
+```
+
+### Body
+
+```json
+{
+  "type": "Enchente",
+  "description": "Risco de alagamento",
+  "severity": "Alta",
+  "cityId": 1
+}
+```
+
+---
+
+## 📖 Listar alertas
+
+```http
+GET /api/Alerts
+```
+
+---
+
+## 🔍 Buscar alerta por ID
+
+```http
+GET /api/Alerts/{id}
+```
+
+---
+
+## ✏️ Atualizar alerta
+
+```http
+PUT /api/Alerts/{id}
+```
+
+### Body
+
+```json
+{
+  "id": 1,
+  "type": "Enchente",
+  "description": "Enchente confirmada",
+  "severity": "Crítica",
+  "createdAt": "2026-06-01T00:00:00Z",
+  "cityId": 1
+}
+```
+
+---
+
+## ❌ Remover alerta
+
+```http
+DELETE /api/Alerts/{id}
+```
+
+---
+
 # 🛢️ Banco de Dados
 
 Banco utilizado:
 
 ```txt
-PostgreSQL
+PostgreSQL 16
 ```
 
-A conexão é configurada no:
+### Tabela Cities
+
+| Campo | Tipo |
+|---------|---------|
+| Id | Integer |
+| Name | Text |
+| State | Text |
+| RiskLevel | Text |
+
+### Tabela Alerts
+
+| Campo | Tipo |
+|---------|---------|
+| Id | Integer |
+| Type | Text |
+| Description | Text |
+| Severity | Text |
+| CreatedAt | DateTime |
+| CityId | Integer |
+
+Relacionamento:
+
+```txt
+Alerts.CityId → Cities.Id
+```
+
+A conexão é configurada através do:
 
 ```txt
 appsettings.json
@@ -181,7 +298,7 @@ appsettings.json
 ## Subir containers
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 ## Derrubar containers
@@ -190,15 +307,78 @@ docker compose up --build
 docker compose down
 ```
 
+## Verificar containers
+
+```bash
+docker ps
+```
+
+## Visualizar logs
+
+```bash
+docker logs rm557323-api
+docker logs rm557323-postgres
+```
+
+---
+
+# 💾 Persistência de Dados
+
+O PostgreSQL utiliza um volume nomeado:
+
+```yaml
+postgres_data:
+```
+
+Garantindo persistência dos dados mesmo após reinicializações dos containers.
+
+---
+
+# 🔒 Segurança
+
+A aplicação é executada utilizando um usuário não-root:
+
+```txt
+appuser
+```
+
+seguindo as boas práticas de segurança para containers Docker.
+
+---
+
+# ☁️ Deploy na Azure
+
+## Azure App Service
+
+```txt
+orbitalalert-api-rm557323
+```
+
+## Azure Database for PostgreSQL
+
+```txt
+orbital-postgres-rm557323
+```
+
+## Swagger Publicado
+
+```txt
+https://orbitalalert-api-rm557323-czdna8eddqfzgrbc.brazilsouth-01.azurewebsites.net/swagger
+```
+
 ---
 
 # 👨‍💻 Autores
-Carlos Eduardo Rodrigues Coelho Pacheco - RM: 557323
 
-João Pedro Amorim Brito Virgens - RM: 559213
+**Carlos Eduardo Rodrigues Coelho Pacheco**  
+RM: 557323
 
-Pedro Augusto Costa Ladeira - RM: 558514
+**João Pedro Amorim Brito Virgens**  
+RM: 559213
+
+**Pedro Augusto Costa Ladeira**  
+RM: 558514
 
 ---
 
-Projeto acadêmico desenvolvido para a FIAP utilizando ASP.NET Core, PostgreSQL, Docker e integração com API pública da NASA.
+Projeto acadêmico desenvolvido para a FIAP utilizando ASP.NET Core 8, PostgreSQL, Docker, Docker Compose, Azure App Service, Azure Database for PostgreSQL e integração com a API pública da NASA.
