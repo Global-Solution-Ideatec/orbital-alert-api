@@ -1,6 +1,6 @@
 # 🚀 Orbital Alert API
 
-API desenvolvida em ASP.NET Core 8 para monitoramento de alertas urbanos com integração à API pública da NASA (APOD).
+API desenvolvida em ASP.NET Core 8 para monitoramento de alertas urbanos com integração à API pública da NASA APOD.
 
 Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP.
 
@@ -10,12 +10,12 @@ Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP
 
 - CRUD completo de Cities
 - CRUD completo de Alerts
-- Integração com API da NASA (APOD)
-- Swagger para documentação
+- Integração com API pública da NASA APOD
+- Swagger para documentação e testes
 - PostgreSQL com Entity Framework Core
 - Docker e Docker Compose
-- Azure App Service
-- Azure Database for PostgreSQL
+- Deploy em Máquina Virtual Linux na Azure
+- Persistência com volume Docker
 - Arquitetura REST
 
 ---
@@ -27,10 +27,37 @@ Projeto desenvolvido para a disciplina de DevOps Tools & Cloud Computing da FIAP
 - PostgreSQL 16
 - Docker
 - Docker Compose
+- Ubuntu Server 24.04 LTS
+- Azure Virtual Machine
 - Swagger / OpenAPI
-- Azure App Service
-- Azure Database for PostgreSQL
 - NASA APOD API
+
+---
+
+# ☁️ Ambiente em Nuvem
+
+A aplicação foi executada em uma **Máquina Virtual Linux na Microsoft Azure**, utilizando Docker e Docker Compose.
+
+## VM Azure
+
+```txt
+Nome da VM: vm-orbitalalert-rm557323
+Sistema operacional: Ubuntu Server 24.04 LTS
+IP público: 4.228.218.78
+```
+
+## Containers executados na VM
+
+```txt
+rm557323-api
+rm557323-postgres
+```
+
+## Swagger publicado pela VM
+
+```txt
+http://4.228.218.78:8080/swagger
+```
 
 ---
 
@@ -57,9 +84,42 @@ OrbitalAlert.API
 
 ---
 
-# 🐳 Como Executar o Projeto
+# 🐳 Como Executar o Projeto na VM Azure
 
-## 1️⃣ Clonar o repositório
+## 1️⃣ Conectar na VM
+
+```bash
+ssh azureuser@4.228.218.78
+```
+
+---
+
+## 2️⃣ Atualizar pacotes da VM
+
+```bash
+sudo apt update
+```
+
+---
+
+## 3️⃣ Instalar Docker, Docker Compose e Git
+
+```bash
+sudo apt install -y docker.io docker-compose-v2 git
+```
+
+---
+
+## 4️⃣ Habilitar e iniciar Docker
+
+```bash
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+---
+
+## 5️⃣ Clonar o repositório
 
 ```bash
 git clone https://github.com/Global-Solution-Ideatec/orbital-alert-api.git
@@ -67,15 +127,15 @@ git clone https://github.com/Global-Solution-Ideatec/orbital-alert-api.git
 
 ---
 
-## 2️⃣ Entrar na pasta do projeto
+## 6️⃣ Entrar na pasta do projeto
 
 ```bash
-cd OrbitalAlert.API
+cd orbital-alert-api
 ```
 
 ---
 
-## 3️⃣ Subir os containers Docker
+## 7️⃣ Subir os containers em segundo plano
 
 ```bash
 docker compose up --build -d
@@ -83,20 +143,130 @@ docker compose up --build -d
 
 ---
 
-## 4️⃣ Verificar containers em execução
+## 8️⃣ Verificar containers em execução
 
 ```bash
 docker ps
 ```
 
----
-
-# 🚀 Swagger Publicado na Azure
-
-A API está disponível publicamente através do Azure App Service:
+Resultado esperado:
 
 ```txt
-https://orbitalalert-api-rm557323-czdna8eddqfzgrbc.brazilsouth-01.azurewebsites.net/swagger
+rm557323-api
+rm557323-postgres
+```
+
+---
+
+# 🚀 Acessar Swagger
+
+Abra no navegador:
+
+```txt
+http://4.228.218.78:8080/swagger
+```
+
+---
+
+# 🐳 Docker Compose
+
+O projeto utiliza Docker Compose para executar dois containers integrados na mesma rede Docker:
+
+- Container da API ASP.NET Core
+- Container PostgreSQL
+
+## Container da API
+
+```txt
+Nome: rm557323-api
+Porta: 8080
+Usuário não-root: appuser
+```
+
+## Container do Banco
+
+```txt
+Nome: rm557323-postgres
+Banco: PostgreSQL 16
+Porta: 5432
+Volume: postgres_data
+```
+
+---
+
+# 🔒 Segurança
+
+A aplicação é executada dentro do container com usuário não privilegiado:
+
+```txt
+appuser
+```
+
+Essa configuração é definida no Dockerfile para evitar execução da aplicação como root.
+
+---
+
+# 💾 Persistência de Dados
+
+O PostgreSQL utiliza volume nomeado:
+
+```yaml
+postgres_data:
+```
+
+Esse volume garante persistência dos dados mesmo após reinicialização dos containers.
+
+---
+
+# 🌐 Rede Docker
+
+Os containers são executados na mesma rede Docker:
+
+```txt
+orbital-network
+```
+
+A API se comunica com o banco utilizando o nome do container PostgreSQL:
+
+```txt
+Host=rm557323-postgres
+```
+
+---
+
+# 🛢️ Banco de Dados
+
+Banco utilizado:
+
+```txt
+PostgreSQL 16
+```
+
+## Tabela Cities
+
+| Campo | Tipo |
+|------|------|
+| Id | Integer |
+| Name | Text |
+| State | Text |
+| RiskLevel | Text |
+
+## Tabela Alerts
+
+| Campo | Tipo |
+|------|------|
+| Id | Integer |
+| Type | Text |
+| Description | Text |
+| Severity | Text |
+| CreatedAt | DateTime |
+| CityId | Integer |
+
+## Relacionamento
+
+```txt
+Cities 1:N Alerts
+Alerts.CityId → Cities.Id
 ```
 
 ---
@@ -109,22 +279,11 @@ https://orbitalalert-api-rm557323-czdna8eddqfzgrbc.brazilsouth-01.azurewebsites.
 GET /api/Nasa/apod
 ```
 
-### Exemplo de resposta
-
-```json
-{
-  "title": "Headphone Nebula",
-  "explanation": "Descrição da imagem astronômica...",
-  "url": "https://apod.nasa.gov/apod/image/example.jpg",
-  "date": "2026-05-27"
-}
-```
-
 ---
 
 # 🏙️ CRUD de Cities
 
-## ➕ Criar cidade
+## Criar cidade
 
 ```http
 POST /api/Cities
@@ -142,7 +301,7 @@ POST /api/Cities
 
 ---
 
-## 📖 Listar cidades
+## Listar cidades
 
 ```http
 GET /api/Cities
@@ -150,7 +309,7 @@ GET /api/Cities
 
 ---
 
-## 🔍 Buscar cidade por ID
+## Buscar cidade por ID
 
 ```http
 GET /api/Cities/{id}
@@ -158,7 +317,7 @@ GET /api/Cities/{id}
 
 ---
 
-## ✏️ Atualizar cidade
+## Atualizar cidade
 
 ```http
 PUT /api/Cities/{id}
@@ -177,7 +336,7 @@ PUT /api/Cities/{id}
 
 ---
 
-## ❌ Remover cidade
+## Remover cidade
 
 ```http
 DELETE /api/Cities/{id}
@@ -187,7 +346,7 @@ DELETE /api/Cities/{id}
 
 # 🚨 CRUD de Alerts
 
-## ➕ Criar alerta
+## Criar alerta
 
 ```http
 POST /api/Alerts
@@ -206,7 +365,7 @@ POST /api/Alerts
 
 ---
 
-## 📖 Listar alertas
+## Listar alertas
 
 ```http
 GET /api/Alerts
@@ -214,7 +373,7 @@ GET /api/Alerts
 
 ---
 
-## 🔍 Buscar alerta por ID
+## Buscar alerta por ID
 
 ```http
 GET /api/Alerts/{id}
@@ -222,7 +381,7 @@ GET /api/Alerts/{id}
 
 ---
 
-## ✏️ Atualizar alerta
+## Atualizar alerta
 
 ```http
 PUT /api/Alerts/{id}
@@ -236,14 +395,14 @@ PUT /api/Alerts/{id}
   "type": "Enchente",
   "description": "Enchente confirmada",
   "severity": "Crítica",
-  "createdAt": "2026-06-01T00:00:00Z",
+  "createdAt": "2026-06-09T00:00:00Z",
   "cityId": 1
 }
 ```
 
 ---
 
-## ❌ Remover alerta
+## Remover alerta
 
 ```http
 DELETE /api/Alerts/{id}
@@ -251,120 +410,101 @@ DELETE /api/Alerts/{id}
 
 ---
 
-# 🛢️ Banco de Dados
+# 📋 Comandos de Evidência
 
-Banco utilizado:
-
-```txt
-PostgreSQL 16
-```
-
-### Tabela Cities
-
-| Campo | Tipo |
-|---------|---------|
-| Id | Integer |
-| Name | Text |
-| State | Text |
-| RiskLevel | Text |
-
-### Tabela Alerts
-
-| Campo | Tipo |
-|---------|---------|
-| Id | Integer |
-| Type | Text |
-| Description | Text |
-| Severity | Text |
-| CreatedAt | DateTime |
-| CityId | Integer |
-
-Relacionamento:
-
-```txt
-Alerts.CityId → Cities.Id
-```
-
-A conexão é configurada através do:
-
-```txt
-appsettings.json
-```
-
----
-
-# 🐳 Docker
-
-## Subir containers
-
-```bash
-docker compose up --build -d
-```
-
-## Derrubar containers
-
-```bash
-docker compose down
-```
-
-## Verificar containers
+## Ver containers
 
 ```bash
 docker ps
 ```
 
-## Visualizar logs
+---
+
+## Ver logs da API
 
 ```bash
 docker logs rm557323-api
+```
+
+---
+
+## Ver logs do PostgreSQL
+
+```bash
 docker logs rm557323-postgres
 ```
 
 ---
 
-# 💾 Persistência de Dados
+## Acessar container da API
 
-O PostgreSQL utiliza um volume nomeado:
-
-```yaml
-postgres_data:
+```bash
+docker exec -it rm557323-api sh
 ```
 
-Garantindo persistência dos dados mesmo após reinicializações dos containers.
+Dentro do container:
+
+```bash
+whoami
+pwd
+ls -l
+```
+
+Sair:
+
+```bash
+exit
+```
 
 ---
 
-# 🔒 Segurança
+## Acessar PostgreSQL
 
-A aplicação é executada utilizando um usuário não-root:
-
-```txt
-appuser
+```bash
+docker exec -it rm557323-postgres psql -U postgres -d orbitaldb
 ```
 
-seguindo as boas práticas de segurança para containers Docker.
+Dentro do PostgreSQL:
+
+```sql
+\dt
+SELECT * FROM "Cities";
+SELECT * FROM "Alerts";
+```
+
+Sair:
+
+```sql
+\q
+```
 
 ---
 
-# ☁️ Deploy na Azure
+## Ver volumes Docker
 
-## Azure App Service
-
-```txt
-orbitalalert-api-rm557323
+```bash
+docker volume ls
 ```
 
-## Azure Database for PostgreSQL
+---
+
+# 🧪 Testes
+
+Os testes foram realizados através do Swagger publicado na VM Azure:
 
 ```txt
-orbital-postgres-rm557323
+http://4.228.218.78:8080/swagger
 ```
 
-## Swagger Publicado
+Foram testados:
 
-```txt
-https://orbitalalert-api-rm557323-czdna8eddqfzgrbc.brazilsouth-01.azurewebsites.net/swagger
-```
+- POST, GET, PUT e DELETE de Cities
+- POST, GET, PUT e DELETE de Alerts
+- GET da integração NASA APOD
+- Persistência dos dados no PostgreSQL via SELECT
+- Execução dos containers em segundo plano
+- Logs dos containers
+- Acesso ao terminal dos containers
 
 ---
 
@@ -381,4 +521,4 @@ RM: 558514
 
 ---
 
-Projeto acadêmico desenvolvido para a FIAP utilizando ASP.NET Core 8, PostgreSQL, Docker, Docker Compose, Azure App Service, Azure Database for PostgreSQL e integração com a API pública da NASA.
+Projeto acadêmico desenvolvido para a FIAP utilizando ASP.NET Core 8, PostgreSQL, Docker, Docker Compose, Azure Virtual Machine Linux e integração com a API pública da NASA.
